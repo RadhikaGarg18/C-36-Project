@@ -41,13 +41,20 @@ function draw() {
   foodObj.display();
 
   //write code to read fedtime value from the database 
-  /*if(lastFed>=12){
+  fedTime = database.ref("FeedTime")
+  fedTime.on("value",function(data){
+    lastFed = data.val()
+  })
 
+  if(lastFed>=12){
+    fill("black")
+    text("lastFed : " + lastFed%12 + "PM", 350,30);
   }else if(lastFed==0){
     text("last Fed = 12 AM",350,30);
   }else{
-    
-  }*/
+    fill("black");
+    text("lastFed : " + lastFed%12 + "AM", 350,30);
+  }
  
   //write code to display text lastFed time here
 
@@ -72,6 +79,10 @@ function feedDog(){
   }else{
     foodObj.updateFoodStock(food_stock_val - 1);
   }
+  database.ref('/').update({
+    Food : foodObj.getFoodStock(),
+    FeedTime : hour()
+  })
 }
 
 //function to add food in stock
@@ -81,3 +92,4 @@ function addFoods(){
     Food:foodS
   })
 }
+
